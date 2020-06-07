@@ -1,5 +1,3 @@
-// Get JSON data
-treeJSON = d3.json("model_3_arbre100.json", function(error, treeData) {
 
     // Calculate total nodes, max label length
     var totalNodes = 0;
@@ -42,6 +40,12 @@ treeJSON = d3.json("model_3_arbre100.json", function(error, treeData) {
             }
         }
     }
+
+ 
+// Get JSON data
+
+d3.json("model_3_arbre100.json", function(error, treeData) {
+
 
     // Call visit function to establish maxLabelLength
     visit(treeData, function(d) {
@@ -252,13 +256,27 @@ treeJSON = d3.json("model_3_arbre100.json", function(error, treeData) {
         }
     }
 
-    function expand(d) {
-        if (d._children) {
+    function expand(d){   
+        var children = (d.children)?d.children:d._children;
+        if (d._children) {        
             d.children = d._children;
-            d.children.forEach(expand);
-            d._children = null;
+            d._children = null;       
         }
+        if(children)
+          children.forEach(expand);
     }
+    
+    expendAll = function(){
+        expand(root); 
+        update(root);
+    }
+    
+    function collapseAll(){
+        root.children.forEach(collapse);
+        collapse(root);
+        update(root);
+    }
+     
 
     var overCircle = function(d) {
         selectedNode = d;
@@ -358,10 +376,10 @@ treeJSON = d3.json("model_3_arbre100.json", function(error, treeData) {
             }
         };
         childCount(0, root);
-        var newHeight = d3.max(levelWidth) * 25; // 25 pixels per line  
+        var newHeight = d3.max(levelWidth) * 20; // 25 pixels per line  
         tree = tree
-        .nodeSize([newHeight, viewerWidth])
-        .separation(function(a, b) { return a.parent == b.parent ? 3 : 3 ;
+        .nodeSize([40, viewerWidth-35]) //[newHeight-35, viewerWidth-35]
+        .separation(function(a, b) { return a.parent == b.parent ? 1 : 1 ;
         });
 
         // Compute the new tree layout.
@@ -429,12 +447,12 @@ treeJSON = d3.json("model_3_arbre100.json", function(error, treeData) {
 
         // Update the text to reflect whether node has children or not.
         node.select('text')
-            .attr("x", function(d) {
-                return d.children || d._children ? -10 : 10;
-            })
-            .attr("text-anchor", function(d) {
-                return d.children || d._children ? "end" : "start";
-            })
+            // .attr("x", function(d) {
+            //     return d.children || d._children ? -10 : 10;
+            // })
+            // .attr("text-anchor", function(d) {
+            //     return d.children || d._children ? "end" : "start";
+            // })
             .text(function(d) {
                 if (d.name.startsWith("leaf")) {return "proba :" + sigmoid(d.leaf)}
                 else
@@ -480,17 +498,16 @@ treeJSON = d3.json("model_3_arbre100.json", function(error, treeData) {
             });
 
         // Enter any new links at the parent's previous position.
-        link.enter().append("text")
-            .attr("font-family", "Arial, Helvetica, sans-serif")
-            .attr("fill", "Black")
-            .style("font", "normal 12px Arial")
-                .attr("transform", function (d) {
-                    return "translate(" + ((d.source.y + d.target.y)/2) + "," + ((d.source.x + d.target.x)/2) + ")";
-                })
-            .attr("text-anchor", "middle")
-            .text(function (d) {
-            return (d.target.nodeid == d.source.missing) ? "Missing":"";}
-            );
+        // link.enter().append("text")
+        //     .attr("font-family", "Arial, Helvetica, sans-serif")
+        //     .attr("fill", "Black")
+        //     .style("font", "normal 12px Arial")
+        //     .attr("transform", function (d) {
+        //         return "translate(" + ((d.source.y + d.target.y)/2) + "," + ((d.source.x + d.target.x)/2) + ")";
+        //     })
+        //     .attr("text-anchor", "middle")
+            
+            
         
         link.enter().insert("path", "g")
             .attr("class", "link")
@@ -506,17 +523,81 @@ treeJSON = d3.json("model_3_arbre100.json", function(error, treeData) {
             })
             .style("stroke", function(d) {return (d.target.nodeid % 2 == 0) ? "#EC4435" : "#3562EC";});
 
+
+
+        var linktext = svgGroup.selectAll("g.link")
+            .data(links, function (d) {
+            return d.target.id;
+        });
+    
+        linktext.enter()
+            .insert("g")
+            .attr("class", "link")
+            .append("text")
+            .attr("font-family", "Arial, Helvetica, sans-serif")
+            .attr("fill", "Black")
+            .style("font", "normal 8px Arial")
+            //.attr("dy", ".35em")
+            //.attr("dy", "-2")
+            .attr("text-anchor", "middle")
+            .text(function (d) { 
+                return (d.target.nodeid == d.source.missing) ? "Missing":"";}
+                )
+                ;
+                
+    
+        // Transition link text to their new positions
+        linktext.transition()
+            .duration(duration)
+            .attr("transform", function (d) {
+              return "translate(" + 
+                ((d.source.y + d.target.y) / 2) + "," 
+                + ((d.source.x + d.target.x) / 2) + ")";
+              //return "translate(" + 500 + "," + 500 + ")";
+        })
+    
+        //Transition exiting link text to the parent's new position.
+        linktext.exit().transition()
+          .duration(duration-2)
+          .attr("transform", function(d) {
+            return "translate(" + source.y + "," + source.x + ")"; })
+            .remove();
+    
         
-            
+
+
+
+
+
+        link.select("text")
+        .attr("transform", function (d) {
+            return "translate(" + ((d.source.y + d.target.y)/2) + "," + ((d.source.x + d.target.x)/2) + ")";
+        })
+        .attr("text-anchor", "middle")
+        .text(function (d) { 
+        return (d.target.nodeid == d.source.missing) ? "Missing":"";}
+        )
+        ;
+        
+
 
 
         // Transition links to their new position.
-        link.transition()
+        var linkUpdate = link.transition()
             .duration(duration)
-            .attr("d", diagonal);
+            .attr("d", diagonal)
+            .attr("text", function(d) {
+                return "translate(" + d.y + "," + d.x + ")";
+            })
+            .attr("transform", function(d) {
+                return "translate(" + d.y + "," + d.x + ")";
+            });
+        
+        linkUpdate.select("text")
+        .style("fill-opacity", 1);
 
         // Transition exiting nodes to the parent's new position.
-        link.exit().transition()
+        var linkExit = link.exit().transition()
             .duration(duration)
             .attr("d", function(d) {
                 var o = {
@@ -529,12 +610,21 @@ treeJSON = d3.json("model_3_arbre100.json", function(error, treeData) {
                 });
             })
             .remove();
+            
+            
+        linkExit.selectAll("text")
+            .attr("fill-opacity", 0)
+            .remove();
+            
+        
 
         // Stash the old positions for transition.
         nodes.forEach(function(d) {
             d.x0 = d.x;
             d.y0 = d.y;
         });
+
+     
     }
 
     // Append a group which holds all nodes and which the zoom Listener can act upon.
@@ -547,7 +637,7 @@ treeJSON = d3.json("model_3_arbre100.json", function(error, treeData) {
 
 
     // Collapse after the second level
-    root.children.forEach(collapse);
+    //root.children.forEach(collapse);
 
     // Layout the tree initially and center on the root node.
     update(root);
@@ -563,6 +653,19 @@ treeJSON = d3.json("model_3_arbre100.json", function(error, treeData) {
         }
     }
 
+    function expandAll() {
+        root.children.forEach(expand);
+        expand(root);
+        update(root);
+    }
+    
+    function collapseAll(){
+        root.children.forEach(collapse);
+        collapse(root);
+        update(root);
+    }
+
 
 
 });
+
