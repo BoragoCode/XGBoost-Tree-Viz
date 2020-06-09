@@ -41,11 +41,13 @@
         }
     }
 
- 
+    
 // Get JSON data
 
-d3.json("model_3_arbre100.json", function(error, treeData) {
+d3.json("./json/model_sable_3_arbre100_RESD_RESM.json", function(error, treeData) {
 
+
+   
 
     // Call visit function to establish maxLabelLength
     visit(treeData, function(d) {
@@ -153,7 +155,16 @@ d3.json("model_3_arbre100.json", function(error, treeData) {
         .attr("class", "overlay")
         .call(zoomListener);
 
+     
 
+        // Handmade legend
+        baseSvg.append("text").attr("x",40).attr("y",30).text("XGBOOST TREE VIZUALISER").style("font-size", "20px").attr("alignment-baseline","middle")
+        baseSvg.append("text").attr("x",40).attr("y",60).text("Lithologie considérée : Sable").style("font-size", "18px").attr("alignment-baseline","middle")
+        baseSvg.append("circle").attr("cx",45).attr("cy",90).attr("r", 3).style("fill", "#3562EC")
+        baseSvg.append("circle").attr("cx",45).attr("cy",120).attr("r", 3).style("fill", "#EC4435")
+        baseSvg.append("text").attr("x", 65).attr("y", 90).text(" Yes, under the threshold at the node").style("font-size", "15px").attr("alignment-baseline","middle")
+        baseSvg.append("text").attr("x", 65).attr("y", 120).text(" No, above the threshold at the node").style("font-size", "15px").attr("alignment-baseline","middle")
+    
     // Define the drag listeners for drag/drop behaviour of nodes.
     dragListener = d3.behavior.drag()
         .on("dragstart", function(d) {
