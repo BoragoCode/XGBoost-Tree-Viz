@@ -1,0 +1,43 @@
+  { "nodeid": 0, "depth": 0, "name": "PHIN", "split_condition": 0.142539501, "yes": 1, "no": 2, "missing": 1, "children": [
+    { "nodeid": 1, "depth": 1, "name": "RESM", "split_condition": 4.3838191, "yes": 3, "no": 4, "missing": 3, "children": [
+      { "nodeid": 3, "depth": 2, "name": "RESM", "split_condition": 2.04428697, "yes": 7, "no": 8, "missing": 7, "children": [
+        { "nodeid": 7, "depth": 3, "name": "CAL", "split_condition": 12.1504745, "yes": 15, "no": 16, "missing": 15, "children": [
+          { "nodeid": 15, "name":"leafx", "leaf": -0.00276162592 },
+          { "nodeid": 16, "name":"leafx", "leaf": -0.0223864168 }
+        ]},
+        { "nodeid": 8, "depth": 3, "name": "GR", "split_condition": 32.6450653, "yes": 17, "no": 18, "missing": 17, "children": [
+          { "nodeid": 17, "name":"leafx", "leaf": -0.0118391998 },
+          { "nodeid": 18, "name":"leafx", "leaf": 0.00599817932 }
+        ]}
+      ]},
+      { "nodeid": 4, "depth": 2, "name": "RESD", "split_condition": 3.14569068, "yes": 9, "no": 10, "missing": 9, "children": [
+        { "nodeid": 9, "depth": 3, "name": "GR", "split_condition": 49.6215973, "yes": 19, "no": 20, "missing": 19, "children": [
+          { "nodeid": 19, "name":"leafx", "leaf": -0.02056095 },
+          { "nodeid": 20, "name":"leafx", "leaf": 0.0430246554 }
+        ]},
+        { "nodeid": 10, "name":"leafx", "leaf": -0.0310999304 }
+      ]}
+    ]},
+    { "nodeid": 2, "depth": 1, "name": "CAL", "split_condition": 20.5088005, "yes": 5, "no": 6, "missing": 5, "children": [
+      { "nodeid": 5, "depth": 2, "name": "GR", "split_condition": 97.7495499, "yes": 11, "no": 12, "missing": 11, "children": [
+        { "nodeid": 11, "depth": 3, "name": "PHIN", "split_condition": 0.278700501, "yes": 23, "no": 24, "missing": 23, "children": [
+          { "nodeid": 23, "name":"leafx", "leaf": 0.00345708523 },
+          { "nodeid": 24, "name":"leafx", "leaf": -0.00570891099 }
+        ]},
+        { "nodeid": 12, "depth": 3, "name": "CAL", "split_condition": 12.6290913, "yes": 25, "no": 26, "missing": 25, "children": [
+          { "nodeid": 25, "name":"leafx", "leaf": 0.00188151188 },
+          { "nodeid": 26, "name":"leafx", "leaf": 0.0192093439 }
+        ]}
+      ]},
+      { "nodeid": 6, "depth": 2, "name": "RESD", "split_condition": 1.94110584, "yes": 13, "no": 14, "missing": 13, "children": [
+        { "nodeid": 13, "depth": 3, "name": "RESD", "split_condition": 1.68076885, "yes": 27, "no": 28, "missing": 27, "children": [
+          { "nodeid": 27, "name":"leafx", "leaf": 0.031399101 },
+          { "nodeid": 28, "name":"leafx", "leaf": 0.0135247661 }
+        ]},
+        { "nodeid": 14, "depth": 3, "name": "GR", "split_condition": 57.0660019, "yes": 29, "no": 30, "missing": 29, "children": [
+          { "nodeid": 29, "name":"leafx", "leaf": -0.0353341885 },
+          { "nodeid": 30, "name":"leafx", "leaf": 0.00896622892 }
+        ]}
+      ]}
+    ]}
+  ]}

@@ -44,7 +44,7 @@
     
 // Get JSON data
 
-d3.json("./json/model_3_arbre100_RESD_RESM.json", function(error, treeData) {
+d3.json("./json/model_3_clean_GR.json", function(error, treeData) {
 
 
    
